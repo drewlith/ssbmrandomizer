@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<textarea id="adv-json" name="adv-json" hidden>{{content}}</textarea>
+<div class="adv-header-grid">
+    <div class = "character-entry" id = "character-entry"> 
+        <label style="padding-right: 8px;">Character</label>
+        <select id="character-select" name="character-select">
+            <option value="all">All Characters</option>
+        </select>
+    </div>
+    <div id="filler" style="display:none">
+
+    </div>
+    <div class = "adv-seed-entry">
+        <label style="padding-right: 8px;">Seed</label>
+        <input type="text" id="seed" name="seed" maxlength="40">
+    </div>
+</div>
+
+<div class="ui-divide">
+    <div>
+        <div class="menu-options">
+            <input type="radio" id="attack-menu" name="menu" value="attacks" checked />
+            <label for="attack-menu">Attacks</label>
+        </div>
+        <div class="menu-options">
+            <input type="radio" id="throw-menu" name="menu" value="throws" />
+            <label for="throw-menu">Throws</label>
+        </div>
+        <div class="menu-options">
+            <input type="radio" id="attribute-menu" name="menu" value="attributes" />
+            <label for="attribute-menu">Attributes</label>
+        </div>
+        <div class="menu-options">
+            <input type="radio" id="gecko-menu" name="menu" value="gecko" />
+            <label for="gecko-menu">Gecko Codes</label>
+        </div>
+        <div class="menu-options">
+            <input type="radio" id="etc-menu" name="menu" value="etc" />
+            <label for="etc-menu">Etc.</label>
+        </div>
+    </div>
+    <div>
+        <div class = "tag-entry" id="tag-entry"> 
+            <label style="padding-right: 8px;">Tag</label>
+            <select id="tag-select" name="tag-select">
+            </select>
+        </div>
+        <div class="ui-grid" id="attack-grid">
+            <div class = "adv-flag-entry" data="data" id="adv-entry" style="display: none;">
+                <select id="rando-category" name="rando-category">
+                    <option value="damage" selected>Damage</option>
+                    <option value="angle">Angle</option>
+                    <option value="growth">Knockback Growth</option>
+                    <option value="set_kb">Set Knockback</option>
+                    <option value="base">Base Knockback</option>
+                    <option value="element">Element</option>
+                    <option value="shield_damage">Shield Damage</option>
+                    <option value="sfx">SFX</option>
+                    <option value="size">Hitbox Size</option>
+                </select>
+                <select id="rando-style" name="rando-style">
+                    <option value="fixed" selected>Set Value</option>
+                    <option value="range">Fixed Range</option>
+                    <option value="percent">Percent Range</option>
+                </select>
+                <br>
+                <div class = "adv-range-grid">
+                    <div class="adv-min">
+                        <input type="number" name="min-value" value="0">
+                        <div class="adv-percent-sign">%</div>
+                    </div>
+                    <div class="adv-divider">
+                        <img src="{{url_for('static', filename='divider.png')}}">
+                    </div>
+                    <div class="adv-max">
+                        <input type="number" name="min-value" value="0">
+                        <div class="adv-percent-sign">%</div>
+                    </div>
+                    <div class="adv-add-button">
+                        <button type="button">Add Flag</button>
+                    </div>
+            </div>
+            <div class = "flag-entry" data="data" id="adv-etc-entry" style="display: none;">
+                <input type="checkbox">
+                <label style="width:50%;">Flag Name</label>
+            </div>
+        </div>
+    </div>
+    <div class="ui-grid" id="throw-grid" style="display: none;"></div>
+    <div class="ui-grid" id="attribute-grid" style="display: none;"></div>
+    <div class="ui-grid" id="gecko-grid" style="display: none;"></div>
+    <div class="ui-grid" id="etc-grid" style="display: none;"></div>
+</div>
+<br>
+<form method=post enctype=multipart/form-data>
+<div class=flagset-label>FLAGSET</div>
+<textarea id="flags" class="flags" name="flags"></textarea>
+<input type="submit" class="generate-button" value="Generate new seed">
+</form>
+</div>
+<div class="tooltips" id="tooltips">
+<p>Welcome to SSBM Randomizer! Created by drewlith. NOTE: Website currently in development.</p>
+</div>
+<br><br><br>
+<script src="{{url_for('static', filename='advanced.js')}}"></script>
+{% endblock %}

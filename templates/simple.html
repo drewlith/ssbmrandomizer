@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<div class="centered">
+  <div class = "seed-entry">
+    <label style="padding-right: 8px;">Seed</label>
+    <input type="text" id="seed" name="seed" maxlength="40">
+  </div>
+  <br>
+
+  <div class="ui-divide">
+    <div>
+      <div class="menu-options">
+        <input type="radio" id="attack-menu" name="menu" value="attacks" checked />
+        <label for="attack-menu">Attacks</label>
+      </div>
+      <div class="menu-options">
+        <input type="radio" id="throw-menu" name="menu" value="throws" />
+        <label for="throw-menu">Throws</label>
+      </div>
+      <div class="menu-options">
+        <input type="radio" id="attribute-menu" name="menu" value="attributes" />
+        <label for="attribute-menu">Attributes</label>
+      </div>
+      <div class="menu-options">
+        <input type="radio" id="gecko-menu" name="menu" value="gecko" />
+        <label for="gecko-menu">Gecko Codes</label>
+      </div>
+      <div class="menu-options">
+        <input type="radio" id="etc-menu" name="menu" value="etc" />
+        <label for="etc-menu">Etc.</label>
+      </div>
+    </div>
+    <div>
+      <div class="ui-grid" id="attack-grid">
+        <div class = "flag-entry" data="data" id="entry" style="display: none;">
+          <input type="checkbox" checked>
+          <label style="width:60%;">Flag Name</label>
+          <select id="mod" name="mod">
+            <option value="lite">Lite</option>
+            <option value="medium" selected>Medium</option>
+            <option value="crazy">Intense</option>
+            <option value="chaos">Chaos</option>
+          </select>
+        </div>
+      </div>
+      <div class="ui-grid" id="throw-grid" style="display: none;"></div>
+      <div class="ui-grid" id="attribute-grid" style="display: none;"></div>
+      <div class="ui-grid" id="gecko-grid" style="display: none;"></div>
+      <div class="ui-grid" id="etc-grid" style="display: none;"></div>
+    </div>
+    
+  </div>
+<br>
+<form method=post enctype=multipart/form-data>
+  <div class=flagset-label>FLAGSET</div>
+  <textarea id="flags" class="flags" name="flags"></textarea>
+  <input type="submit" class="generate-button" value="Generate new seed">
+</form>
+</div>
+<div class="tooltips" id="tooltips">
+  <p>Welcome to SSBM Randomizer! Created by drewlith. NOTE: Website currently in development.</p>
+</div>
+<br><br><br>
+<script src="{{url_for('static', filename='simple.js')}}"></script>
+{% endblock %}
