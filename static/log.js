@@ -113,7 +113,25 @@ function updateLog() {
             logDisplay.appendChild(dividerDisplay);
             logDisplay.appendChild(newValueDisplay);
         }
-        
+        if (key === "Tags") {
+            tagLabelDisplay = document.createElement("div");
+            filler = document.createElement("div");
+            filler2 = document.createElement("div");
+            tagLabelDisplay.innerHTML = key;
+            tagLabelDisplay.style.color = "gold";
+            tagLabelDisplay.style.fontSize = "x-large";
+            tagLabelDisplay.style.textAlign = "left";
+            tagLabelDisplay.style.fontFamily = "FolkPro";
+            tagDisplay = document.createElement("div");
+            tagDisplay.style.textAlign = "left";
+            tagDisplay.innerHTML = properties["Tags"];
+            tagDisplay.style.color = "white";
+            tagDisplay.style.fontSize = "x-large";
+            logDisplay.appendChild(tagLabelDisplay);
+            logDisplay.appendChild(tagDisplay);
+            logDisplay.appendChild(filler);
+            logDisplay.appendChild(filler2);
+        }
       });
     //logDisplay.innerHTML = JSON.stringify(fighterSubCategoryDict[checkSubcategory()]);
 }

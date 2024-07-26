@@ -22,6 +22,8 @@ var tagSelect = document.getElementById("tag-entry");
 var charSelect = document.getElementById("character-entry");
 var filler = document.getElementById("filler");
 var advancedModeFlags = "";
+var lastFlagset = "";
+var customFlags = "";
 
 function addFlagEntry(grid, entryName, tooltip="") {
     newEntry = flagInput.cloneNode(true);
@@ -154,7 +156,9 @@ function updateFlags(flagToAdd="") {
             flagset += geckoEntries[i].data + " ";
         }
     }
+    flagset += customFlags;
     flagArea.value = flagset;
+    lastFlagset = flagset;
 };
 
 function updateComponents() {
@@ -174,6 +178,9 @@ function updateComponents() {
             allFlags[i].children[0].checked = false;
         }
     }
+    flagset = flagset.substring(0, flagset.length - 1);
+    var newCustomFlags = flagset.replace(lastFlagset, "")
+    customFlags += newCustomFlags;
 }
 
 function getStringAfter(string, start) {

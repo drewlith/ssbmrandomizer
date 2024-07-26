@@ -37,7 +37,6 @@ def start(_flags="", code=""):
     log.get_start_values()
     simple.start(flags)
     flag_parser.start(flags)
-    #get_adv_data.start()
     # Finish
     log.create_log_dict(flags, True, code)
     fst.write_iso(melee_files)

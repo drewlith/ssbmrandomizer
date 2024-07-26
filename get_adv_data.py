@@ -5,14 +5,17 @@ ALL_ATTACK_TAGS = ["Attack", "Normal", "Special", "Shine", "Recovery", "Up B", "
             "Sweet Spot", "Sour Spot", "Weak Hit", "Strong Hit", "Late Hit", ]
 ALL_THROW_TAGS = ["Throw", "Normal", "Special", "Kill Throw", "Forward Throw",
             "Down Throw", "Up Throw", "Back Throw", "Combo Throw", "Command Throw"]
-ALL_ATTRIBUTE_TAGS = ["Attribute", "Article", "Special", "Common", "Movement", "Animation", "Frames", "Scale",
+all_attribute_tags = ["Attribute", "Article", "Special", "Common", "Movement", "Animation", "Frames", "Scale",
                   "Projectile", "Etc", "Property"]
+
 def start():
+    ref_character = characters.fighters[0]
+    for attribute in ref_character.attributes:
+        all_attribute_tags.append(attribute.name)
     adv_dict = {}
     adv_dict["All Attacks"] = ALL_ATTACK_TAGS
     adv_dict["All Throws"] = ALL_THROW_TAGS
-    adv_dict["All Attributes"] = ALL_ATTRIBUTE_TAGS
-    
+    adv_dict["All Attributes"] = all_attribute_tags
     for fighter in characters.fighters:
         fighter_dict = {}
         attacks = []

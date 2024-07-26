@@ -13,6 +13,8 @@ var entries = [];
 var geckoEntries = [];
 var options = document.getElementsByClassName("menu-options");
 var flagNames = [];
+var lastFlagset = "";
+var customFlags = "";
 
 function addFlagEntry(grid, entryName, flagName, tooltip="", _entries=entries) {
     newEntry = flagInput.cloneNode(true);
@@ -62,7 +64,9 @@ function updateFlags() {
             flagset += geckoEntries[i].data + " ";
         }
     }
+    flagset += customFlags;
     flagArea.value = flagset;
+    lastFlagset = flagset;
 };
 
 function updateComponents() {
@@ -82,6 +86,9 @@ function updateComponents() {
             allFlags[i].children[0].checked = false;
         }
     }
+    flagset = flagset.substring(0, flagset.length - 1);
+    var newCustomFlags = flagset.replace(lastFlagset, "")
+    customFlags += newCustomFlags;
 }
 
 function getStringAfter(string, start) {

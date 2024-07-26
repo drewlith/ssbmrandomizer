@@ -124,16 +124,8 @@ def create_flag(flag):
     # Percent Range
     if key_phrases[0] == "randomize%":
         # Global
-        if key_phrases[1] == "attributes":
-            for fighter in characters.fighters:
-                for attribute in fighter.attributes:
-                    attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-                for attribute in fighter.special_attributes:
-                    attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-                for attribute in fighter.article_attributes:
-                    attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-        # Global Attacks/Throws
-        elif not is_character(key_phrases[1]) and not is_tag(key_phrases[1]) and not is_attack(key_phrases[1]) and not is_throw(key_phrases[1]):
+        # Global Attacks/Throws by name
+        if not is_character(key_phrases[1]) and not is_tag(key_phrases[1]) and not is_attack(key_phrases[1]) and not is_throw(key_phrases[1]) and not is_attribute(key_phrases[1]):
             for fighter in characters.fighters:
                 for attack in fighter.attacks:
                     value = percent_range(getattr(attack, key_phrases[1]), parameter_a, parameter_b)
@@ -142,7 +134,7 @@ def create_flag(flag):
                     value = percent_range(getattr(throw, key_phrases[1]), parameter_a, parameter_b)
                     setattr(throw, key_phrases[1], value)
         # Global Attributes by name
-        if is_attribute(key_phrases[1]):
+        elif is_attribute(key_phrases[1]):
             for fighter in characters.fighters:
                 for attribute in fighter.attributes:
                     for tag in attribute.tags:
@@ -156,8 +148,8 @@ def create_flag(flag):
                    for tag in attribute.tags:
                         if key_phrases[1] == tag:
                             attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-        # Global Tags
-        if is_tag(key_phrases[1]):
+        # Global Tags Attacks and Throws
+        elif is_tag(key_phrases[1]):
             for fighter in characters.fighters:
                 for attack in fighter.attacks:
                     for tag in attack.tags:
@@ -170,7 +162,7 @@ def create_flag(flag):
                             value = percent_range(getattr(throw, key_phrases[2]), parameter_a, parameter_b)
                             setattr(throw, key_phrases[2], value)
         # Character Global
-        if is_character(key_phrases[1]):
+        elif is_character(key_phrases[1]):
             fighter = eval(key_phrases[1])
             if key_phrases[2] == "attributes":
                 for attribute in fighter.attributes:
@@ -223,7 +215,7 @@ def create_flag(flag):
                 for throw in fighter.throws:
                     setattr(throw, key_phrases[1], rng(parameter_a, parameter_b))
         # Global Attributes by name
-        if is_attribute(key_phrases[1]):
+        elif is_attribute(key_phrases[1]):
             for fighter in characters.fighters:
                 for attribute in fighter.attributes:
                     for tag in attribute.tags:
@@ -247,7 +239,7 @@ def create_flag(flag):
                             else:
                                 attribute.value = rng_f(parameter_a, parameter_b)
         # Global Tags
-        if is_tag(key_phrases[1]):
+        elif is_tag(key_phrases[1]):
             for fighter in characters.fighters:
                 for attack in fighter.attacks:
                     for tag in attack.tags:
@@ -258,7 +250,7 @@ def create_flag(flag):
                         if key_phrases[1] == tag:
                             setattr(throw, key_phrases[2], rng(parameter_a, parameter_b))
         # Character Global
-        if is_character(key_phrases[1]):
+        elif is_character(key_phrases[1]):
             fighter = eval(key_phrases[1])
             if not is_tag(key_phrases[2]) and not is_attribute(key_phrases[2]) and not is_attack(key_phrases[2]) and not is_throw(key_phrases[2]):
                 for attack in fighter.attacks:
