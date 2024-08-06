@@ -32,28 +32,28 @@ def is_character(string):
 def is_attack(string):
     tag_list = characters.attack_tags
     for tag in tag_list:
-        if string == tag:
+        if string.lower() == tag.lower():
             return True
     return False
 
 def is_throw(string):
     tag_list = characters.throw_tags
     for tag in tag_list:
-        if string == tag:
+        if string.lower() == tag.lower():
             return True
     return False
 
 def is_attribute(string):
     tag_list = characters.attribute_tags
     for tag in tag_list:
-        if string == tag:
+        if string.lower() == tag.lower():
             return True
     return False
 
 def is_tag(string):
     tag_list = characters.ALL_TAGS
     for tag in tag_list:
-        if string == tag:
+        if string.lower() == tag.lower():
             return True
     return False
 
@@ -67,7 +67,7 @@ def create_flag(flag):
     ganon = characters.find_fighter("Ganondorf")
     popo = characters.find_fighter("Popo")
     nana = characters.find_fighter("Nana")
-    puff = characters.find_fighter("Jigglypuff")
+    jigglypuff = characters.find_fighter("Jigglypuff")
     kirby = characters.find_fighter("Kirby")
     link = characters.find_fighter("Link")
     luigi = characters.find_fighter("Luigi")
@@ -93,7 +93,7 @@ def create_flag(flag):
     parameter_b = 0
     flag += " "
     for char in flag:
-        if char == "_":
+        if char == "_" and current_phrase != "shield" and current_phrase != "set":
             key_phrases.append(current_phrase)
             current_phrase = ""
         elif char == " ":
@@ -118,102 +118,104 @@ def create_flag(flag):
             else:
                 a += char
     else:
-        if len(parameter_string) > 0:   
-            parameter_a = int(parameter_string)
+        if len(parameter_string) > 0:
+            if "." in parameter_string:
+                parameter_a = float(parameter_string)
+            else:
+                parameter_a = int(parameter_string)
 
     # Percent Range
     if key_phrases[0] == "randomize%":
         # Global
         # Global Attacks/Throws by name
-        if not is_character(key_phrases[1]) and not is_tag(key_phrases[1]) and not is_attack(key_phrases[1]) and not is_throw(key_phrases[1]) and not is_attribute(key_phrases[1]):
+        if is_attack(key_phrases[1]):
             for fighter in characters.fighters:
                 for attack in fighter.attacks:
-                    value = percent_range(getattr(attack, key_phrases[1]), parameter_a, parameter_b)
-                    setattr(attack, key_phrases[1], value)
+                    value = percent_range(getattr(attack, key_phrases[2]), parameter_a, parameter_b)
+                    setattr(attack, key_phrases[2], value)
+        elif is_throw(key_phrases[1]):
+            for fighter in characters.fighters:
                 for throw in fighter.throws:
-                    value = percent_range(getattr(throw, key_phrases[1]), parameter_a, parameter_b)
-                    setattr(throw, key_phrases[1], value)
+                    value = percent_range(getattr(throw, key_phrases[2]), parameter_a, parameter_b)
+                    setattr(throw, key_phrases[2], value)
         # Global Attributes by name
         elif is_attribute(key_phrases[1]):
             for fighter in characters.fighters:
                 for attribute in fighter.attributes:
                     for tag in attribute.tags:
-                        if key_phrases[1] == tag:
+                        if key_phrases[1].lower() == tag.lower():
                             attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
                 for attribute in fighter.special_attributes:
                     for tag in attribute.tags:
-                        if key_phrases[1] == tag:
+                        if key_phrases[1].lower() == tag.lower():
                             attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
                 for attribute in fighter.article_attributes:
                    for tag in attribute.tags:
-                        if key_phrases[1] == tag:
+                        if key_phrases[1].lower() == tag.lower():
                             attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
         # Global Tags Attacks and Throws
         elif is_tag(key_phrases[1]):
             for fighter in characters.fighters:
                 for attack in fighter.attacks:
                     for tag in attack.tags:
-                        if key_phrases[1] == tag:
+                        if key_phrases[1].lower() == tag.lower():
                             value = percent_range(getattr(attack, key_phrases[2]), parameter_a, parameter_b)
                             setattr(attack, key_phrases[2], value)
                 for throw in fighter.throws:
                     for tag in throw.tags:
-                        if key_phrases[1] == tag:
+                        if key_phrases[1].lower() == tag.lower():
                             value = percent_range(getattr(throw, key_phrases[2]), parameter_a, parameter_b)
                             setattr(throw, key_phrases[2], value)
         # Character Global
         elif is_character(key_phrases[1]):
             fighter = eval(key_phrases[1])
-            if key_phrases[2] == "attributes":
-                for attribute in fighter.attributes:
-                    attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-                for attribute in fighter.special_attributes:
-                    attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-                for attribute in fighter.article_attributes:
-                    attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-            elif not is_tag(key_phrases[2]) and not is_attribute(key_phrases[2]) and not is_attack(key_phrases[2] and not is_throw(key_phrases[2])):
-                for attack in fighter.attacks:
-                    value = percent_range(getattr(attack, key_phrases[2]), parameter_a, parameter_b)
-                    setattr(attack, key_phrases[2], value)
-                for throw in fighter.throws:
-                    value = percent_range(getattr(throw, key_phrases[2]), parameter_a, parameter_b)
-                    setattr(throw, key_phrases[2], value)
-            # Character Specific
-            # Attributes
-            if is_attribute(key_phrases[2]):
-                for attribute in fighter.attributes:
-                    for tag in attribute.tags:
-                        if key_phrases[2] == tag:
-                            attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-                for attribute in fighter.special_attributes:
-                    for tag in attribute.tags:
-                        if key_phrases[2] == tag:
-                            attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-                for attribute in fighter.article_attributes:
-                    for tag in attribute.tags:
-                        if key_phrases[2] == tag:
-                            attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
-            # Throws/Attacks
-            if is_tag(key_phrases[2]) or is_attack(key_phrases[2]) or is_throw(key_phrases[2]):
+            if is_attack(key_phrases[2]):
                 for attack in fighter.attacks:
                     for tag in attack.tags:
-                        if key_phrases[2] == tag:
+                        if tag == key_phrases[2]:
+                            value = percent_range(getattr(attack, key_phrases[3]), parameter_a, parameter_b)
+                            setattr(attack, key_phrases[3], value)
+            elif is_throw(key_phrases[2]):
+                for throw in fighter.throws:
+                    for tag in throw.tags:
+                        if tag == key_phrases[2]:
+                            value = percent_range(getattr(throw, key_phrases[3]), parameter_a, parameter_b)
+                            setattr(throw, key_phrases[3], value)
+            elif is_attribute(key_phrases[2]):
+                for attribute in fighter.attributes:
+                    for tag in attribute.tags:
+                        if key_phrases[2].lower() == tag.lower():
+                            attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
+                for attribute in fighter.special_attributes:
+                    for tag in attribute.tags:
+                        if key_phrases[2].lower() == tag.lower():
+                            attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
+                for attribute in fighter.article_attributes:
+                    for tag in attribute.tags:
+                        if key_phrases[2].lower() == tag.lower():
+                            attribute.value = percent_range(attribute.value, parameter_a, parameter_b)
+            elif is_tag(key_phrases[2]):
+                for attack in fighter.attacks:
+                    for tag in attack.tags:
+                        if key_phrases[2].lower() == tag.lower():
                             value = percent_range(getattr(attack, key_phrases[3]), parameter_a, parameter_b)
                             setattr(attack, key_phrases[3], value)
                 for throw in fighter.throws:
                     for tag in throw.tags:
-                        if key_phrases[2] == tag:
+                        if key_phrases[2].lower() == tag.lower():
                             value = percent_range(getattr(throw, key_phrases[3]), parameter_a, parameter_b)
                             setattr(throw, key_phrases[3], value)
     # Normal Range
     if key_phrases[0] == "randomize":
         # Global First
-        if not is_character(key_phrases[1]) and not is_tag(key_phrases[1]) and not is_attribute(key_phrases[1]) and not is_attack(key_phrases[1]) and not is_throw(key_phrases[1]):
+        if is_attack(key_phrases[1]):
             for fighter in characters.fighters:
                 for attack in fighter.attacks:
-                    setattr(attack, key_phrases[1], rng(parameter_a, parameter_b))
+                    setattr(attack, key_phrases[2], rng(parameter_a, parameter_b))
+        elif is_throw(key_phrases[1]):      
+            for fighter in characters.fighters: 
                 for throw in fighter.throws:
-                    setattr(throw, key_phrases[1], rng(parameter_a, parameter_b))
+                    setattr(throw, key_phrases[2], rng(parameter_a, parameter_b))
         # Global Attributes by name
         elif is_attribute(key_phrases[1]):
             for fighter in characters.fighters:
@@ -243,54 +245,55 @@ def create_flag(flag):
             for fighter in characters.fighters:
                 for attack in fighter.attacks:
                     for tag in attack.tags:
-                        if key_phrases[1] == tag:
+                        if key_phrases[1].lower() == tag.lower():
                             setattr(attack, key_phrases[2], rng(parameter_a, parameter_b))
                 for throw in fighter.throws:
                     for tag in throw.tags:
-                        if key_phrases[1] == tag:
+                        if key_phrases[1].lower() == tag.lower():
                             setattr(throw, key_phrases[2], rng(parameter_a, parameter_b))
         # Character Global
         elif is_character(key_phrases[1]):
             fighter = eval(key_phrases[1])
-            if not is_tag(key_phrases[2]) and not is_attribute(key_phrases[2]) and not is_attack(key_phrases[2]) and not is_throw(key_phrases[2]):
+            if is_attack(key_phrases[2]):
                 for attack in fighter.attacks:
-                    setattr(attack, key_phrases[2], rng(parameter_a, parameter_b))
+                    for tag in attack.tags:
+                        if key_phrases[2].lower() == tag.lower():
+                            setattr(attack, key_phrases[3], rng(parameter_a, parameter_b))
+            elif is_throw(key_phrases[2]):
                 for throw in fighter.throws:
-                    setattr(throw, key_phrases[2], rng(parameter_a, parameter_b))
-        # Character Specific
-        # Character Attributes by Name
-            if is_attribute(key_phrases[2]):
+                    for tag in throw.tags:
+                        if key_phrases[2].lower() == tag.lower():
+                            setattr(throw, key_phrases[3], rng(parameter_a, parameter_b))
+            elif is_attribute(key_phrases[2]):
                 for attribute in fighter.attributes:
                     for tag in attribute.tags:
-                        if key_phrases[2] == tag:
+                        if key_phrases[2].lower() == tag.lower():
                             if attribute.integer:
                                 attribute.value = rng(parameter_a, parameter_b)
                             else:
                                 attribute.value = rng_f(parameter_a, parameter_b)
                 for attribute in fighter.special_attributes:
                     for tag in attribute.tags:
-                        if key_phrases[2] == tag:
+                        if key_phrases[2].lower() == tag.lower():
                             if attribute.integer:
                                 attribute.value = rng(parameter_a, parameter_b)
                             else:
                                 attribute.value = rng_f(parameter_a, parameter_b)
                 for attribute in fighter.article_attributes:
                     for tag in attribute.tags:
-                        if key_phrases[2] == tag:
+                        if key_phrases[2].lower() == tag.lower():
                             if attribute.integer:
                                 attribute.value = rng(parameter_a, parameter_b)
                             else:
                                 attribute.value = rng_f(parameter_a, parameter_b)
-        # Character Attacks/Throws by Tag
-            if is_tag(key_phrases[2]) or is_attack(key_phrases[2]) or is_throw(key_phrases[2]):
-                fighter = eval(key_phrases[1])
+            elif is_tag(key_phrases[2]):
                 for attack in fighter.attacks:
                     for tag in attack.tags:
-                        if key_phrases[2] == tag:
+                        if key_phrases[2].lower() == tag.lower():
                             setattr(attack, key_phrases[3], rng(parameter_a, parameter_b))
                 for throw in fighter.throws:
                     for tag in throw.tags:
-                        if key_phrases[2] == tag:
+                        if key_phrases[2].lower() == tag.lower():
                             setattr(throw, key_phrases[3], rng(parameter_a, parameter_b))
 
     # Global Set
@@ -298,25 +301,25 @@ def create_flag(flag):
         for fighter in characters.fighters:
             for attack in fighter.attacks:
                 for tag in attack.tags:
-                    if key_phrases[0] == tag:
+                    if key_phrases[0].lower() == tag.lower():
                         setattr(attack, key_phrases[1], parameter_a)
             for throw in fighter.throws:
                 for tag in throw.tags:
-                    if key_phrases[0] == tag:
+                    if key_phrases[0].lower() == tag.lower():
                         setattr(throw, key_phrases[1], parameter_a)
-    if is_attribute(key_phrases[0]):
+    elif is_attribute(key_phrases[0]):
         for fighter in characters.fighters:
             for attribute in fighter.attributes:
                 for tag in attribute.tags:
-                    if key_phrases[0] == tag:
+                    if key_phrases[0].lower() == tag.lower():
                         attribute.value = parameter_a
             for attribute in fighter.special_attributes:
                 for tag in attribute.tags:
-                    if key_phrases[0] == tag:
+                    if key_phrases[0].lower() == tag.lower():
                         attribute.value = parameter_a
             for attribute in fighter.article_attributes:
                 for tag in attribute.tags:
-                    if key_phrases[0] == tag:
+                    if key_phrases[0].lower() == tag.lower():
                         attribute.value = parameter_a
     # Character Global Set
     if is_character(key_phrases[0]):
@@ -324,24 +327,24 @@ def create_flag(flag):
         if is_tag(key_phrases[1]) or is_attack(key_phrases[1]) or is_throw(key_phrases[1]):
             for attack in fighter.attacks:
                 for tag in attack.tags:
-                    if key_phrases[1] == tag:
+                    if key_phrases[1].lower() == tag.lower():
                         setattr(attack, key_phrases[2], parameter_a)
             for throw in fighter.throws:
                 for tag in throw.tags:
-                    if key_phrases[1] == tag:
+                    if key_phrases[1].lower() == tag.lower():
                         setattr(throw, key_phrases[2], parameter_a)
         if is_attribute(key_phrases[1]):
             for attribute in fighter.attributes:
                 for tag in attribute.tags:
-                    if key_phrases[1] == tag:
+                    if key_phrases[1].lower() == tag.lower():
                         attribute.value = parameter_a
             for attribute in fighter.special_attributes:
                 for tag in attribute.tags:
-                    if key_phrases[1] == tag:
+                    if key_phrases[1].lower() == tag.lower():
                         attribute.value = parameter_a
             for attribute in fighter.article_attributes:
                 for tag in attribute.tags:
-                    if key_phrases[1] == tag:
+                    if key_phrases[1].lower() == tag.lower():
                         attribute.value = parameter_a
         
 def start(flags):
@@ -353,9 +356,7 @@ def start(flags):
     for char in flags:
         if char == "-":
             # Delimit certain flags
-            if char == "&":
-                current_flag = ""
-            elif "seed " in current_flag:
+            if "seed " in current_flag:
                 current_flag = ""
             else:
                 flag_array.append(current_flag)
@@ -363,6 +364,7 @@ def start(flags):
         else:
             current_flag += char
     for flag in flag_array:
-        create_flag(flag)
+        if not "gecko" in flag:
+            create_flag(flag)
             
     #print("End randomizing")

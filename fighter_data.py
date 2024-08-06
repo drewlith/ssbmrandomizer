@@ -1,4 +1,5 @@
-import characters
+import characters, fst
+from dat import Hitbox
 # Script pulls data from subactions and attribute data and aims to abstract them to make each item
 # Easier to work with later.
 def attack_from_subaction(subactions, action_id):
@@ -88,7 +89,10 @@ def add_special_data(files):
     bowser.add_throw(bowser.subactions[305].throws[0], "Koopa Klaw Back Throw")
     bowser.add_throw(bowser.subactions[309].throws[0], "Aerial Koopa Klaw Forward Throw")
     bowser.add_throw(bowser.subactions[310].throws[0], "Aerial Koopa Klaw Back Throw")
-    
+    # Projectiles, no way to search from DAT that I know of...
+    bowser_data = fst.find_file(files, b'PlKp.dat').file_data
+    offsets = bowser.projectile_offsets
+    bowser.add_attack([Hitbox(bowser_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Flame", 2, ["Projectile", "Special"])
     # Special Attributes
     attribute_data = bowser.special_attribute_data
     bowser.add_attribute_special(attribute_data, 0x00, "Passive Super Armor")
@@ -117,6 +121,8 @@ def add_special_data(files):
     bowser.add_attribute_article(flame_data, 0x0C, "Flame Acceleration")
     bowser.add_attribute_article(flame_data, 0x10, "Flame Min. Angle")
     bowser.add_attribute_article(flame_data, 0x14, "Flame Max Angle")
+
+    
     # Captain Falcon
     falcon = characters.find_fighter("Captain Falcon")
     falcon.add_attack(merge_from_subactions(falcon.subactions, [301, 302]), "Falcon Punch")
@@ -179,6 +185,10 @@ def add_special_data(files):
     dr.add_attack(attack_from_subaction(dr.subactions, 297), "Super Sheet")
     dr.add_attack(merge_from_subactions(dr.subactions, [299, 300]), "Super Jump Punch")
     dr.add_attack(merge_from_subactions(dr.subactions, [301, 302]), "Dr. Tornado")
+    # Projectiles
+    dr_data = fst.find_file(files, b'PlDr.dat').file_data
+    offsets = dr.projectile_offsets
+    dr.add_attack([Hitbox(dr_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Megavitamin", 3, ["Projectile", "Special"])
     # Special Attributes
     attribute_data = dr.special_attribute_data
     dr.add_attribute_special(attribute_data, 0x00, "Super Sheet Horizontal Momentum")
@@ -216,6 +226,12 @@ def add_special_data(files):
     falco.add_attack(merge_from_subactions(falco.subactions, [308, 309]), "Fire Bird")
     falco.add_attack(attack_from_subaction(falco.subactions, 313), "Shine")
     attribute_data = falco.special_attribute_data
+    # Projectiles
+    falco_data = fst.find_file(files, b'PlFc.dat').file_data
+    offsets = falco.projectile_offsets
+    falco.add_attack([Hitbox(falco_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Laser", 2, ["Projectile", "Special"])
+    falco.add_attack([Hitbox(falco_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Phantasm (Ground)", 4, ["Projectile", "Special"])
+    falco.add_attack([Hitbox(falco_data[offsets[2]:offsets[2]+20], offsets[2]-0x20)], "Phantasm (Air)", 4, ["Projectile", "Special"])
     # Special Attributes
     falco.add_attribute_special(attribute_data, 0x10, "Blaster Launch Angle")
     falco.add_attribute_special(attribute_data, 0x14, "Blaster Launch Speed")
@@ -262,6 +278,13 @@ def add_special_data(files):
     fox.add_attack(attack_from_subaction(fox.subactions, 307), "Fire Fox (Start)")
     fox.add_attack(merge_from_subactions(fox.subactions, [308, 309]), "Fire Fox")
     fox.add_attack(attack_from_subaction(fox.subactions, 313), "Shine")
+    # Projectiles
+    fox_data = fst.find_file(files, b'PlFx.dat').file_data
+    offsets = fox.projectile_offsets
+    fox.add_attack([Hitbox(fox_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Laser", 2, ["Projectile", "Special"])
+    fox.add_attack([Hitbox(fox_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Phantasm (Ground)", 4, ["Projectile", "Special"])
+    fox.add_attack([Hitbox(fox_data[offsets[2]:offsets[2]+20], offsets[2]-0x20)], "Phantasm (Air)", 4, ["Projectile", "Special"])
+    # Special Attributes
     attribute_data = fox.special_attribute_data
     fox.add_attribute_special(attribute_data, 0x10, "Blaster Launch Angle")
     fox.add_attribute_special(attribute_data, 0x14, "Blaster Launch Speed")
@@ -333,7 +356,12 @@ def add_special_data(files):
     
     # Popo
     popo = characters.find_fighter("Popo")
-    popo.add_attack(attack_from_subaction(popo.subactions, 295), "Ice Shot")
+    popo.add_attack(attack_from_subaction(popo.subactions, 295), "Ice Shot (Swing)")
+    # Projectiles
+    popo_data = fst.find_file(files, b'PlPp.dat').file_data
+    offsets = popo.projectile_offsets
+    popo.add_attack([Hitbox(popo_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Ice Block", 2, ["Projectile", "Special"])
+    # Attributes
     attribute_data = popo.special_attribute_data
     popo.add_attribute_special(attribute_data, 0x00, "Spawn Offset")
     popo.add_attribute_special(attribute_data, 0x04, "Ice Shot Aerial Vertical Momentum")
@@ -420,6 +448,10 @@ def add_special_data(files):
     nana = characters.find_fighter("Nana")
     nana.add_attack(attack_from_subaction(nana.subactions, 295), "Ice Shot")
     nana.add_attack(attack_from_subaction(nana.subactions, 316), "Belay")
+    # Projectiles
+    nana_data = fst.find_file(files, b'PlNn.dat').file_data
+    offsets = nana.projectile_offsets
+    nana.add_attack([Hitbox(nana_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Ice Block", 2, ["Projectile", "Special"])
 
     # Jigglypuff
     puff = characters.find_fighter("Jigglypuff")
@@ -488,6 +520,11 @@ def add_special_data(files):
     kirby.add_attack(merge_from_subactions(kirby.subactions, [463, 464]), "Warlock Punch (Copy)")
     kirby.add_attack(attack_from_subaction(kirby.subactions, 467), "Flare Blade? (Copy, Uncharged)") # Does a lot of shield damage similar to Marth's
     kirby.add_attack(attack_from_subaction(kirby.subactions, 468), "Flare Blade? (Copy, Charged)")
+    # Projectiles
+    kirby_data = fst.find_file(files, b'PlKb.dat').file_data
+    offsets = kirby.projectile_offsets
+    kirby.add_attack([Hitbox(kirby_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Final Cutter", 3, ["Projectile", "Special"])
+    # Special Attributes
     attribute_data = kirby.special_attribute_data
     kirby.add_attribute_special(attribute_data, 0x0, "Jumps Turn Duration", True)
     kirby.add_attribute_special(attribute_data, 0x4, "Jumps Horizontal Momentum Backward")
@@ -658,6 +695,13 @@ def add_special_data(files):
     link.add_attack(attack_from_subaction(link.subactions, 308), "Spin Attack (Ground)")
     link.add_attack(attack_from_subaction(link.subactions, 309), "Spin Attack (Air)")
     link.add_attack(attack_from_subaction(link.subactions, 312), "Hookshot (Air)")
+    # Projectiles
+    link_data = fst.find_file(files, b'PlLk.dat').file_data
+    offsets = link.projectile_offsets
+    link.add_attack([Hitbox(link_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Arrow", 1, ["Projectile", "Special"])
+    link.add_attack([Hitbox(link_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Bomb (Impact)", 1, ["Projectile", "Special"])
+    link.add_attack([Hitbox(link_data[offsets[2]:offsets[2]+20], offsets[2]-0x20)], "Bomb (Explosion)", 3, ["Projectile", "Special"])
+    # Attributes
     attribute_data = link.special_attribute_data
     link.add_attribute_special(attribute_data, 0x0, "Bow Frames For Max Charge")
     link.add_attribute_special(attribute_data, 0x4, "Bow Charge Speed")
@@ -748,7 +792,12 @@ def add_special_data(files):
     luigi.add_attack(attack_from_subaction(luigi.subactions, 308), "Super Jump Punch (Ground)")
     luigi.add_attack(attack_from_subaction(luigi.subactions, 309), "Super Jump Punch (Air)")
     luigi.add_attack(merge_from_subactions(luigi.subactions, [310, 311]), "Cyclone")
+    # Projectiles
+    luigi_data = fst.find_file(files, b'PlLg.dat').file_data
+    offsets = luigi.projectile_offsets
+    luigi.add_attack([Hitbox(luigi_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Fireball", 3, ["Projectile", "Special"])
     attribute_data = luigi.special_attribute_data
+    # Attributes
     luigi.add_attribute_special(attribute_data, 0x8, "Green Missile Charge Rate")
     luigi.add_attribute_special(attribute_data, 0xC, "Green Missile Frames to Fully Charge")
     luigi.add_attribute_special(attribute_data, 0x10, "Green Missile Tilt Damage")
@@ -793,6 +842,11 @@ def add_special_data(files):
     mario.add_attack(merge_from_subactions(mario.subactions, [297, 298]), "Cape")
     mario.add_attack(merge_from_subactions(mario.subactions, [299, 300]), "Super Jump Punch")
     mario.add_attack(merge_from_subactions(mario.subactions, [301, 302]), "Tornado")
+    # Projectiles
+    mario_data = fst.find_file(files, b'PlMr.dat').file_data
+    offsets = mario.projectile_offsets
+    mario.add_attack([Hitbox(mario_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Fireball", 3, ["Projectile", "Special"])
+    # Attributes
     attribute_data = mario.special_attribute_data
     mario.add_attribute_special(attribute_data, 0x00, "Cape Horizontal Momentum")
     mario.add_attribute_special(attribute_data, 0x04, "Cape Horizontal Velocity")
@@ -876,6 +930,15 @@ def add_special_data(files):
     mewtwo = characters.find_fighter("Mewtwo")
     mewtwo.add_attack(merge_from_subactions(mewtwo.subactions, [296, 297]), "Shadow Ball (Loop)")
     attribute_data = mewtwo.special_attribute_data
+    # Projectiles
+    mewtwo_data = fst.find_file(files, b'PlMt.dat').file_data
+    offsets = mewtwo.projectile_offsets
+    mewtwo.add_attack([Hitbox(mewtwo_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Shadowball 1", 2, ["Projectile", "Special"])
+    mewtwo.add_attack([Hitbox(mewtwo_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Shadowball 2", 3, ["Projectile", "Special"])
+    mewtwo.add_attack([Hitbox(mewtwo_data[offsets[2]:offsets[2]+20], offsets[2]-0x20)], "Shadowball 3", 6, ["Projectile", "Special"])
+    mewtwo.add_attack([Hitbox(mewtwo_data[offsets[3]:offsets[3]+20], offsets[3]-0x20)], "Shadowball 4", 8, ["Projectile", "Special"])
+    mewtwo.add_attack([Hitbox(mewtwo_data[offsets[4]:offsets[4]+20], offsets[4]-0x20)], "Disable", 1, ["Projectile", "Special"])
+    # Attributes
     mewtwo.add_attribute_special(attribute_data, 0x0, "Shadow Ball Charge Increment")
     mewtwo.add_attribute_special(attribute_data, 0x4, "Shadow Ball Release Momentum Grounded")
     mewtwo.add_attribute_special(attribute_data, 0x8, "Shadow Ball Release Momentum Air")
@@ -926,6 +989,11 @@ def add_special_data(files):
     gnw.add_attack(merge_from_subactions(gnw.subactions, [304, 313]), "Judgment (8)")
     gnw.add_attack(merge_from_subactions(gnw.subactions, [305, 314]), "Judgment (9)")
     gnw.add_attack(attack_from_subaction(gnw.subactions, 315), "Fire!")
+    # Projectiles
+    gnw_data = fst.find_file(files, b'PlGw.dat').file_data
+    offsets = gnw.projectile_offsets
+    gnw.add_attack([Hitbox(gnw_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Sausage", 2, ["Projectile", "Special"])
+    # Attributes
     attribute_data = gnw.special_attribute_data
     gnw.add_attribute_special(attribute_data, 0x0, "Model Width")
     gnw.add_attribute_special(attribute_data, 0x18, "Chef Multi Hit Begin Frame")
@@ -976,6 +1044,14 @@ def add_special_data(files):
     ness.add_attack(merge_from_subactions(ness.subactions, [295, 296]), "Up Smash (Hold)")
     ness.add_attack(attack_from_subaction(ness.subactions, 298), "Down Smash (2)")
     ness.add_attack(attack_from_subaction(ness.subactions, 312), "PK Thunder (Bolt hits Ness)")
+    # Projectiles
+    ness_data = fst.find_file(files, b'PlNs.dat').file_data
+    offsets = ness.projectile_offsets
+    ness.add_attack([Hitbox(ness_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "PK Flash", 1, ["Projectile", "Special"])
+    ness.add_attack([Hitbox(ness_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "PK Fire 1", 2, ["Projectile", "Special"])
+    ness.add_attack([Hitbox(ness_data[offsets[2]:offsets[2]+20], offsets[2]-0x20)], "PK Fire 2", 2, ["Projectile", "Special", "Multihit"])
+    ness.add_attack([Hitbox(ness_data[offsets[3]:offsets[3]+20], offsets[3]-0x20)], "PK Thunder", 2, ["Projectile", "Special"])
+    # Attributes
     attribute_data = ness.special_attribute_data
     ness.add_attribute_special(attribute_data, 0x0, "PK Flash Grounded Animation Loop Frames", True)
     ness.add_attribute_special(attribute_data, 0x4, "PK Flash Air Animation Loop Frames", True)
@@ -1065,6 +1141,11 @@ def add_special_data(files):
     peach.add_attack(attack_from_subaction(peach.subactions, 300), "Frying Pan")
     peach.add_attack(attack_from_subaction(peach.subactions, 308), "Parasol")
     peach.add_attack(attack_from_subaction(peach.subactions, 316), "Parasol (Reopen)")
+    # Projectiles
+    peach_data = fst.find_file(files, b'PlPe.dat').file_data
+    offsets = peach.projectile_offsets
+    peach.add_attack([Hitbox(peach_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Turnip?", 2, ["Projectile", "Special"])
+    # Attributes
     attribute_data = peach.special_attribute_data
     peach.add_attribute_special(attribute_data, 0xC, "Float Duration")
     peach.add_attribute_special(attribute_data, 0x14, "Vegetable Base Odds (1/X)", True)
@@ -1112,6 +1193,12 @@ def add_special_data(files):
     pichu = characters.find_fighter("Pichu")
     pichu.add_attack(merge_from_subactions(pichu.subactions, [298, 299]), "Skull Bash")
     pichu.add_attack(attack_from_subaction(pichu.subactions, 314), "Thunder")
+    # Projectiles
+    pichu_data = fst.find_file(files, b'PlPc.dat').file_data
+    offsets = pichu.projectile_offsets
+    pichu.add_attack([Hitbox(pichu_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Thunder Jolt", 4, ["Projectile", "Special"])
+    pichu.add_attack([Hitbox(pichu_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Thunder", 4, ["Projectile", "Special", "Multihit"])
+    # Attributes
     attribute_data = pichu.special_attribute_data
     pichu.add_attribute_special(attribute_data, 0x0, "Thunder Jolt Ground Spawn X-Offset")
     pichu.add_attribute_special(attribute_data, 0x4, "Thunder Jolt Ground Spawn Y-Offset")
@@ -1170,6 +1257,12 @@ def add_special_data(files):
     pikachu.add_attack(merge_from_subactions(pikachu.subactions, [298, 299]), "Skull Bash")
     pikachu.add_attack(merge_from_subactions(pikachu.subactions, [306, 307]), "Quick Attack")
     pikachu.add_attack(attack_from_subaction(pikachu.subactions, 314), "Thunder")
+    # Projectiles
+    pikachu_data = fst.find_file(files, b'PlPk.dat').file_data
+    offsets = pikachu.projectile_offsets
+    pikachu.add_attack([Hitbox(pikachu_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Thunder Jolt", 4, ["Projectile", "Special"])
+    pikachu.add_attack([Hitbox(pikachu_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Thunder", 7, ["Projectile", "Special"])
+    # Attributes
     attribute_data = pikachu.special_attribute_data
     pikachu.add_attribute_special(attribute_data, 0x0, "Thunder Jolt Ground Spawn X-Offset")
     pikachu.add_attribute_special(attribute_data, 0x4, "Thunder Jolt Ground Spawn Y-Offset")
@@ -1274,6 +1367,14 @@ def add_special_data(files):
     samus = characters.find_fighter("Samus")
     samus.add_attack(merge_from_subactions(samus.subactions, [307, 308]), "Screw Attack")
     samus.add_attack(attack_from_subaction(samus.subactions, 311), "Grapple Beam (Air)")
+    # Projectiles
+    samus_data = fst.find_file(files, b'PlSs.dat').file_data
+    offsets = samus.projectile_offsets
+    samus.add_attack([Hitbox(samus_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Charge Shot", 2, ["Projectile", "Special"])
+    samus.add_attack([Hitbox(samus_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Missile (Homing)", 3, ["Projectile", "Special"])
+    samus.add_attack([Hitbox(samus_data[offsets[2]:offsets[2]+20], offsets[2]-0x20)], "Missile (Super)", 6, ["Projectile", "Special"])
+    samus.add_attack([Hitbox(samus_data[offsets[3]:offsets[3]+20], offsets[3]-0x20)], "Morph Ball Bomb", 3, ["Projectile", "Special"])
+    # Attributes
     attribute_data = samus.special_attribute_data
     samus.add_attribute_special(attribute_data, 0x0, "Bomb Self-Hit Animation Delay")
     samus.add_attribute_special(attribute_data, 0x4, "Bomb Self-Hit Grounded Launch Angle")
@@ -1355,6 +1456,11 @@ def add_special_data(files):
     # Sheik
     sheik = characters.find_fighter("Sheik")
     sheik.add_attack(attack_from_subaction(sheik.subactions, 303), "Chain Dance (Initial hit only?)")
+    # Projectiles
+    sheik_data = fst.find_file(files, b'PlSk.dat').file_data
+    offsets = sheik.projectile_offsets
+    sheik.add_attack([Hitbox(sheik_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Needle", 1, ["Projectile", "Special"])
+    # Attributes
     attribute_data = sheik.special_attribute_data
     sheik.add_attribute_special(attribute_data, 0x14, "Chain Dance Base Duration")
     sheik.add_attribute_special(attribute_data, 0x18, "Chain Dance Rehit Rate")
@@ -1405,6 +1511,12 @@ def add_special_data(files):
     yoshi = characters.find_fighter("Yoshi")
     yoshi.add_attack(merge_from_subactions(yoshi.subactions, [302, 307]), "Egg Roll")
     yoshi.add_attack(merge_from_subactions(yoshi.subactions, [310, 311, 313]), "Ground Pound")
+    # Projectiles
+    yoshi_data = fst.find_file(files, b'PlYs.dat').file_data
+    offsets = yoshi.projectile_offsets
+    yoshi.add_attack([Hitbox(yoshi_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Egg", 5, ["Projectile", "Special"])
+    yoshi.add_attack([Hitbox(yoshi_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Stars", 1, ["Projectile", "Special"])
+    # Attributes
     attribute_data = yoshi.special_attribute_data
     yoshi.add_attribute_special(attribute_data, 0x0, "Flutter Jump Turn Duration", True)
     yoshi.add_attribute_special(attribute_data, 0x8, "Flutter Jump Super Armor")
@@ -1475,6 +1587,13 @@ def add_special_data(files):
     young_link.add_attack(attack_from_subaction(young_link.subactions, 308), "Spin Attack (Ground)")
     young_link.add_attack(attack_from_subaction(young_link.subactions, 309), "Spin Attack (Air)")
     young_link.add_attack(attack_from_subaction(young_link.subactions, 312), "Hookshot (Air)")
+    # Projectiles
+    young_link_data = fst.find_file(files, b'PlCl.dat').file_data
+    offsets = young_link.projectile_offsets
+    young_link.add_attack([Hitbox(young_link_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Arrow", 2, ["Projectile", "Special"])
+    young_link.add_attack([Hitbox(young_link_data[offsets[1]:offsets[1]+20], offsets[1]-0x20)], "Bomb (Impact)", 1, ["Projectile", "Special"])
+    young_link.add_attack([Hitbox(young_link_data[offsets[2]:offsets[2]+20], offsets[2]-0x20)], "Bomb (Explosion)", 4, ["Projectile", "Special"])
+    # Attributes
     attribute_data = young_link.special_attribute_data
     young_link.add_attribute_special(attribute_data, 0x0, "Bow Frames For Max Charge")
     young_link.add_attribute_special(attribute_data, 0x4, "Bow Charge Speed")
@@ -1562,6 +1681,11 @@ def add_special_data(files):
     zelda.add_attack(attack_from_subaction(zelda.subactions, 295), "Nayru's Love")
     zelda.add_attack(merge_from_subactions(zelda.subactions, [300, 301, 302]), "Din's Fire (?)")
     zelda.add_attack(merge_from_subactions(zelda.subactions, [303, 304, 305, 306]), "Farore's Wind (?)")
+    # Projectiles
+    zelda_data = fst.find_file(files, b'PlZd.dat').file_data
+    offsets = zelda.projectile_offsets
+    zelda.add_attack([Hitbox(zelda_data[offsets[0]:offsets[0]+20], offsets[0]-0x20)], "Din's Fire", 1, ["Projectile", "Special"])
+    # Attributes
     attribute_data = zelda.special_attribute_data
     zelda.add_attribute_special(attribute_data, 0x4, "Nayru's Love Gravity Delay", True)
     zelda.add_attribute_special(attribute_data, 0x8, "Nayru's Love Momentum Preservation")
@@ -1605,6 +1729,8 @@ def add_special_data(files):
     zelda.add_attribute_article(dins_data_b, 0x08, "Din's Fire Explosion Graphic Growth Multiplier", 1)
     zelda.add_attribute_article(dins_data_b, 0x0C, "Din's Fire Explosion Base Damage", 1)
     zelda.add_attribute_article(dins_data_b, 0x10, "Din's Fire Explosion Damage Multiplier", 1)
+
+    
     
     
     
