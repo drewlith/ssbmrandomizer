@@ -23,7 +23,7 @@ attack_tags = []
 throw_tags = []
 
 class Fighter():
-    def __init__(self, name, special_attribute_block_size, article_sizes = [], article_offsets = []):
+    def __init__(self, name, special_attribute_block_size, article_sizes = [], article_offsets = [], projectile_offsets = []):
         self.name = name
         self.subactions = dat.get_subactions()
         self.attributes = []
@@ -33,6 +33,7 @@ class Fighter():
         self.attacks = []
         self.item_attacks = []
         self.throws = []
+        self.projectile_offsets = []
         self.add_attributes(dat.get_attribute_data())
         self.special_attribute_data = dat.get_special_attribute_data(special_attribute_block_size)
         self.articles_sizes = article_sizes
@@ -297,7 +298,7 @@ def find_fighter(name):
             return fighter
     print("No fighter found with name:", name)
 
-def add_fighter(player_data, name, special_attribute_block_size, articles_sizes=[], articles_offsets=[], boss=False):
+def add_fighter(player_data, name, special_attribute_block_size, articles_sizes=[], articles_offsets=[], projectile_offsets=[], boss=False):
     #print("Getting data from", name)
     player_data.load_file_data()
     dat.load_data(player_data.file_data)
@@ -310,41 +311,43 @@ def add_fighter(player_data, name, special_attribute_block_size, articles_sizes=
     fighter.articles_sizes = articles_sizes
     fighter.articles_offsets = articles_offsets
     fighter.articles_datas = dat.get_article_data(fighter)
+    fighter.projectile_offsets = projectile_offsets
 
 def add_fighters(melee_files):
     fighters.clear()
     bosses.clear()
-    add_fighter(fst.find_file(melee_files, b'PlKp.dat'), "Bowser", 0xA0, [0x18], [0x40D8])
+    add_fighter(fst.find_file(melee_files, b'PlKp.dat'), "Bowser", 0xA0, [0x18], [0x40D8], [0x4110])
     add_fighter(fst.find_file(melee_files, b'PlCa.dat'), "Captain Falcon", 0x8C)
     add_fighter(fst.find_file(melee_files, b'PlDk.dat'), "Donkey Kong", 0x74)
-    add_fighter(fst.find_file(melee_files, b'PlDr.dat'), "Dr. Mario", 0x84, [0x14], [0x3BD4])
-    add_fighter(fst.find_file(melee_files, b'PlFc.dat'), "Falco", 0xD4, [0x28, 0x8], [0x3F50, 0x4140])
-    add_fighter(fst.find_file(melee_files, b'PlFx.dat'), "Fox", 0xD4, [0x28, 0x8], [0x3E94, 0x409C])
-    add_fighter(fst.find_file(melee_files, b'PlGw.dat'), "Mr. Game & Watch", 0x94, [0x74], [0x4378])
+    add_fighter(fst.find_file(melee_files, b'PlDr.dat'), "Dr. Mario", 0x84, [0x14], [0x3BD4], [0x3C08])
+    add_fighter(fst.find_file(melee_files, b'PlFc.dat'), "Falco", 0xD4, [0x28, 0x8], [0x3F50, 0x4140], [0x3F98, 0x4168, 0x4184])
+    add_fighter(fst.find_file(melee_files, b'PlFx.dat'), "Fox", 0xD4, [0x28, 0x8], [0x3E94, 0x409C], [0x3EDC, 0x40C4, 0x40E0])
+    add_fighter(fst.find_file(melee_files, b'PlGw.dat'), "Mr. Game & Watch", 0x94, [0x74], [0x4378], [0x440C])
     add_fighter(fst.find_file(melee_files, b'PlGn.dat'), "Ganondorf", 0x8C)
-    add_fighter(fst.find_file(melee_files, b'PlPp.dat'), "Popo", 0x15C, [0x34, 0x18, 0x24], [0x3ADC, 0x3BB0, 0x3CA0])
-    add_fighter(fst.find_file(melee_files, b'PlNn.dat'), "Nana", 0x15C)
+    add_fighter(fst.find_file(melee_files, b'PlPp.dat'), "Popo", 0x15C, [0x34, 0x18, 0x24], [0x3ADC, 0x3BB0, 0x3CA0], [0x3B30])
+    add_fighter(fst.find_file(melee_files, b'PlNn.dat'), "Nana", 0x15C, [], [], [0x1A14])
     add_fighter(fst.find_file(melee_files, b'PlPr.dat'), "Jigglypuff", 0x100)
-    add_fighter(fst.find_file(melee_files, b'PlKb.dat'), "Kirby", 0x424, [0x10], [0x7B2C])
-    add_fighter(fst.find_file(melee_files, b'PlLk.dat'), "Link", 0xDC, [0x34, 0x64, 0x64, 0x2C], [0x4204, 0x40C0, 0x3E58, 0x3F48])
-    add_fighter(fst.find_file(melee_files, b'PlLg.dat'), "Luigi", 0x98, [0x84, 0x10], [0x3A3C, 0x3A74])
-    add_fighter(fst.find_file(melee_files, b'PlMr.dat'), "Mario", 0x84, [0x14], [0x3A98])
+    add_fighter(fst.find_file(melee_files, b'PlKb.dat'), "Kirby", 0x424, [0x10], [0x7B2C], [0x7B7C])
+    add_fighter(fst.find_file(melee_files, b'PlLk.dat'), "Link", 0xDC, [0x34, 0x64, 0x64, 0x2C], [0x4204, 0x40C0, 0x3E58, 0x3F48], [0x3FB4, 0x4258, 0x4184])
+    add_fighter(fst.find_file(melee_files, b'PlLg.dat'), "Luigi", 0x98, [0x84, 0x10], [0x3A3C, 0x3A74], [0x3AA4])
+    add_fighter(fst.find_file(melee_files, b'PlMr.dat'), "Mario", 0x84, [0x14], [0x3A98], [0x3ACC])
     add_fighter(fst.find_file(melee_files, b'PlMs.dat'), "Marth", 0x98)
-    add_fighter(fst.find_file(melee_files, b'PlMt.dat'), "Mewtwo", 0x88, [0x8, 0x30], [0x3390, 0x3CD8])
+    add_fighter(fst.find_file(melee_files, b'PlMt.dat'), "Mewtwo", 0x88, [0x8, 0x30], [0x3390, 0x3CD8], [0x3DD4, 0x3E0C, 0x3E44, 0x3E98, 0x3D00])
     add_fighter(fst.find_file(melee_files, b'PlNs.dat'), "Ness", 0xDC, [0x8, 0xC, 0x2C, 0x14, 0x14, 0x5C],
-                                                                [0x3E48, 0x3F10, 0x3C78, 0x4024, 0x3C7C, 0x4284])
-    add_fighter(fst.find_file(melee_files, b'PlPe.dat'), "Peach", 0xC0, [0x48, 0x10], [0x40E8, 0x42E0])
-    add_fighter(fst.find_file(melee_files, b'PlPc.dat'), "Pichu", 0xF8, [0xC, 0xC], [0x3CBC, 0x3B34])
-    add_fighter(fst.find_file(melee_files, b'PlPk.dat'), "Pikachu", 0xF8, [0xC, 0xC], [0x3E1C, 0x3C74])
+                                                                [0x3E48, 0x3F10, 0x3C78, 0x4024, 0x3C7C, 0x4284],
+                                                                [0x3D94, 0x3F3C, 0x3F5C, 0x4138])
+    add_fighter(fst.find_file(melee_files, b'PlPe.dat'), "Peach", 0xC0, [0x48, 0x10], [0x40E8, 0x42E0], [0x4310])
+    add_fighter(fst.find_file(melee_files, b'PlPc.dat'), "Pichu", 0xF8, [0xC, 0xC], [0x3CBC, 0x3B34], [0x3B64, 0x3CE8])
+    add_fighter(fst.find_file(melee_files, b'PlPk.dat'), "Pikachu", 0xF8, [0xC, 0xC], [0x3E1C, 0x3C74], [0x3CA4, 0x3E28])
     add_fighter(fst.find_file(melee_files, b'PlFe.dat'), "Roy", 0x98)
-    add_fighter(fst.find_file(melee_files, b'PlSs.dat'), "Samus", 0xD3, [0x10, 0x20, 0x38, 0x7C], [0x4124, 0x3E90, 0x4018, 0x4210])
-    add_fighter(fst.find_file(melee_files, b'PlSk.dat'), "Sheik", 0x74, [0xC, 0x6C], [0x3994, 0x3C1C])
-    add_fighter(fst.find_file(melee_files, b'PlYs.dat'), "Yoshi", 0x138, [0x8, 0x8], [0x3A68, 0x3B4C])
-    add_fighter(fst.find_file(melee_files, b'PlCl.dat'), "Young Link", 0xDC, [0x34, 0x64, 0x64, 0x2C], [0x43E0, 0x429C, 0x4034, 0x4124])
-    add_fighter(fst.find_file(melee_files, b'PlZd.dat'), "Zelda", 0xA8, [0x30, 0x14], [0x3EC8, 0x3FA0])
-    add_fighter(fst.find_file(melee_files, b'PlBo.dat'), "Boy", 0x4, [], [], True)
-    add_fighter(fst.find_file(melee_files, b'PlGl.dat'), "Girl", 0x4, [], [], True)
-    add_fighter(fst.find_file(melee_files, b'PlGk.dat'), "Giga Bowser", 0x4, [], [], True)
-    add_fighter(fst.find_file(melee_files, b'PlMh.dat'), "Master Hand", 0x4, [], [], True)
-    add_fighter(fst.find_file(melee_files, b'PlCh.dat'), "Crazy Hand", 0x4, [], [], True)
+    add_fighter(fst.find_file(melee_files, b'PlSs.dat'), "Samus", 0xD3, [0x10, 0x20, 0x38, 0x7C], [0x4124, 0x3E90, 0x4018, 0x4210], [0x3ED4, 0x4070, 0x408C, 0x4170])
+    add_fighter(fst.find_file(melee_files, b'PlSk.dat'), "Sheik", 0x74, [0xC, 0x6C], [0x3994, 0x3C1C], [0x39C0])
+    add_fighter(fst.find_file(melee_files, b'PlYs.dat'), "Yoshi", 0x138, [0x8, 0x8], [0x3A68, 0x3B4C], [0x3A90, 0x3B74])
+    add_fighter(fst.find_file(melee_files, b'PlCl.dat'), "Young Link", 0xDC, [0x34, 0x64, 0x64, 0x2C], [0x43E0, 0x429C, 0x4034, 0x4124], [0x4190, 0x4434, 0x445C])
+    add_fighter(fst.find_file(melee_files, b'PlZd.dat'), "Zelda", 0xA8, [0x30, 0x14], [0x3EC8, 0x3FA0], [0x3FE4])
+    add_fighter(fst.find_file(melee_files, b'PlBo.dat'), "Boy", 0x4, [], [], [], True)
+    add_fighter(fst.find_file(melee_files, b'PlGl.dat'), "Girl", 0x4, [], [], [], True)
+    add_fighter(fst.find_file(melee_files, b'PlGk.dat'), "Giga Bowser", 0x4, [], [], [], True)
+    add_fighter(fst.find_file(melee_files, b'PlMh.dat'), "Master Hand", 0x4, [], [], [], True)
+    add_fighter(fst.find_file(melee_files, b'PlCh.dat'), "Crazy Hand", 0x4, [], [], [], True)
 
